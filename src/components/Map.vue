@@ -19,18 +19,24 @@ export default {
   },
   methods: {
     onClick(e) {
-      const countryId = wc([e.mapboxEvent.lngLat.lng, e.mapboxEvent.lngLat.lat])
-      this.$emit("pickedCountry", {country: countryId, x: e.mapboxEvent.point.x, y: e.mapboxEvent.point.y });
+      const countryId = wc([
+        e.mapboxEvent.lngLat.lng,
+        e.mapboxEvent.lngLat.lat,
+      ]);
+      this.$emit("pickedCountry", {
+        country: countryId,
+        x: e.mapboxEvent.point.x,
+        y: e.mapboxEvent.point.y,
+      });
     },
   },
   data() {
     return {
-      accessToken:
-        "pk.eyJ1IjoidGFtbWFyb2l2YW4iLCJhIjoiY2thd2UzcWNkMGt1aTMzcGNraDkyNmN3ZCJ9.5psgFsIH3BdJyk50wfTONA", // your access token. Needed if you using Mapbox maps
-      mapStyle: "mapbox://styles/tammaroivan/ckaweiy564nd61ik9viii2gtv", // your map style
+      accessToken: process.env.VUE_APP_MAP_TOKEN, // your access token. Needed if you using Mapbox maps
+      mapStyle: "mapbox://styles/tammaroivan/ckawnwq9d0dee1ilnxrnegehr", // your map style
     };
   },
-  created() {
+  created() {    
     this.mapbox = Mapbox;
   },
 };

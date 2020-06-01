@@ -4,8 +4,8 @@
     <StatusUpdate ref="status" />
     <nav class="nav" v-bind:class="{ active: currentCountry }">
       <span>{{ guessedCountries.length }}/{{ totalCountries }}</span>
-      <span v-if="currentCountry"
-        >Current Country: {{ currentCountry.properties.name }}</span
+      <span v-if="currentCountry" class="current-country"
+        >Current country: <u>{{ currentCountry.properties.name }}</u></span
       >
       <span
         >{{ lifes }}
@@ -113,6 +113,11 @@ export default {
 
   &.active {
     top: 0;
+  }
+
+  .current-country {
+    font-weight: bold;
+    font-size: 18px;
   }
 }
 

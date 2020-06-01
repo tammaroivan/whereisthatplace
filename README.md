@@ -1,4 +1,5 @@
 # whereisthatcountry
+[![Netlify Status](https://api.netlify.com/api/v1/badges/74d52758-a83c-4988-ad66-9d4fa45e5eed/deploy-status)](https://app.netlify.com/sites/whereisthatplace/deploys)
 
 ## Project setup
 ```

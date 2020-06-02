@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import * as wc from "which-country";
+import countries from "@/assets/countries.geo.json";
+import * as whichPolygon from "which-polygon";
 import Mapbox from "mapbox-gl";
 import { MglMap, MglGeojsonLayer } from "vue-mapbox";
-import countries from "which-country/lib/data.geo.json";
 
 export default {
   props: ["highlightAreas"],
@@ -29,13 +29,15 @@ export default {
   },
   methods: {
     onClick(e) {
-      const countryId = wc([
+      const query = whichPolygon(countries);
+      const country = query([
         e.mapboxEvent.lngLat.lng,
         e.mapboxEvent.lngLat.lat,
       ]);
-      if (countryId)
+      
+      if (country)
         this.$emit("pickedCountry", {
-          country: countryId,
+          country: country.adm0_a3,
           x: e.mapboxEvent.point.x,
           y: e.mapboxEvent.point.y,
         });
@@ -48,7 +50,6 @@ export default {
     return {
       accessToken: process.env.VUE_APP_MAP_TOKEN, // your access token. Needed if you using Mapbox maps
       mapStyle: "mapbox://styles/tammaroivan/ckawnwq9d0dee1ilnxrnegehr", // your map style
-      test: countries.features,
       geoJsonSource: {
         type: "geojson",
         data: {

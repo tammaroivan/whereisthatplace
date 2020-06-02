@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import countries from "which-country/lib/data.geo.json";
+import countries from "@/assets/countries.geo.json";
 import Map from "./Map";
 import Modal from "./Modal";
 import StatusUpdate from "./StatusUpdate";
@@ -38,8 +38,8 @@ export default {
     choosedCountry(clickData) {
       if (clickData) {
         const selectedCountry = countries.features.find(
-          (country) => country.id === clickData.country
-        );
+          (country) => country.properties.adm0_a3 === clickData.country
+        );        
         if (selectedCountry.id === this.$store.getters.currentCountry.id) {
           this.$refs.status.showStatus({
             status: "success",

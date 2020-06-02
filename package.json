@@ -14,7 +14,7 @@
     "vue": "^2.6.11",
     "vue-mapbox": "^0.4.1",
     "vuex": "^3.4.0",
-    "which-country": "^1.0.0"
+    "which-polygon": "^2.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

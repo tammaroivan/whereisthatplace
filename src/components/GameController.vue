@@ -50,10 +50,11 @@ export default {
           this.$store.commit("addFoundCountry", selectedCountry);
           this.$refs.map.updateHighlightedAreas(
             this.$store.getters.foundCountries
-          );
+          );          
           this.remainingCountries = this.remainingCountries.filter(
-            (c) => c.id !== clickData.country
+            (c) => c.properties.adm0_a3 !== clickData.country
           );
+          
           this.setNewCountry();
         } else {
           this.$store.dispatch("decreaseLifes");

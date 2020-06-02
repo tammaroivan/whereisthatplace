@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="content" v-if="state === 'start'">
-      <h1 class="title">Welcome to ¿Where is that place?</h1>
+      <h1 class="title">Welcome to ¿Where is that site?</h1>
       <p class="description">
         You will be asked to guess where is a specific country.
       </p>
@@ -16,7 +16,7 @@
       <button @click="start" class="btn btn-start">Start Game</button>
     </div>
     <div class="content" v-if="state === 'end'">
-      <h1 class="title">¿Where is that place?</h1>
+      <h1 class="title">¿Where is that site?</h1>
       <p class="description">
         You did your best. You found {{ foundAmount }} countries in
         {{ formattedLastTime }}.

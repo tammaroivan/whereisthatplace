@@ -34,6 +34,10 @@ export default {
       this.setNewCountry();
       this.$store.commit("setGameState", "started");
       this.$refs.gameData.startTimer();
+      this.$gtag.event('newGame', {
+        'event_category': 'game',
+        'event_label': 'new'
+      });
     },
     choosedCountry(clickData) {
       if (clickData) {

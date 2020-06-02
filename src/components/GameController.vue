@@ -1,68 +1,62 @@
 <template>
   <div>
-    <Modal @start="startGame" v-show="!currentCountry" />
+    <Modal @start="startGame" v-show="!currentCountry" :state="state" />
     <StatusUpdate ref="status" />
-    <nav class="nav" v-bind:class="{ active: currentCountry }">
-      <span>{{ guessedCountries.length }}/{{ totalCountries }}</span>
-      <span v-if="currentCountry" class="current-country"
-        >Current country: <u>{{ currentCountry.properties.name }}</u></span
-      >
-      <span
-        >{{ lifes }}
-        <img class="heart" src="@/assets/heart.svg" />
-      </span>
-    </nav>
+    <CurrentGameData ref="gameData" />
     <Map @pickedCountry="choosedCountry" ref="map" />
   </div>
 </template>
 
 <script>
 import countries from "which-country/lib/data.geo.json";
+import Map from "./Map";
 import Modal from "./Modal";
 import StatusUpdate from "./StatusUpdate";
-import Map from "./Map";
+import CurrentGameData from "./CurrentGameData";
 
 export default {
   components: {
     Modal,
     Map,
     StatusUpdate,
+    CurrentGameData,
   },
   data() {
     return {
-      totalCountries: 0,
-      guessedCountries: [],
       remainingCountries: [],
-      currentCountry: "",
       countries: [],
-      lifes: 3,
       showType: "",
+      state: "start",
     };
   },
   methods: {
     startGame() {
       this.setNewCountry();
+      this.$store.commit("setGameState", "started");
+      this.$refs.gameData.startTimer();
     },
     choosedCountry(clickData) {
       if (clickData) {
         const selectedCountry = countries.features.find(
           (country) => country.id === clickData.country
         );
-        if (selectedCountry.id === this.currentCountry.id) {
+        if (selectedCountry.id === this.$store.getters.currentCountry.id) {
           this.$refs.status.showStatus({
             status: "success",
             x: clickData.x,
             y: clickData.y,
           });
-          this.guessedCountries.push(selectedCountry);
-          this.$refs.map.updateHighlightedAreas(this.guessedCountries);
+          this.$store.commit("addFoundCountry", selectedCountry);
+          this.$refs.map.updateHighlightedAreas(
+            this.$store.getters.foundCountries
+          );
           this.remainingCountries = this.remainingCountries.filter(
             (c) => c.id !== clickData.country
           );
           this.setNewCountry();
         } else {
-          this.lifes--;
-          if (this.lifes === 0) {
+          this.$store.dispatch("decreaseLifes");
+          if (this.$store.getters.remainingLifes === 0) {
             this.restartGame();
           } else {
             this.$refs.status.showStatus({
@@ -76,54 +70,37 @@ export default {
       }
     },
     restartGame() {
-      this.guessedCountries = [];
-      this.$refs.map.updateHighlightedAreas(this.guessedCountries);
-      this.currentCountry = "";
+      this.$store.commit("setLastMaxFound");
+      this.$store.commit("setLastTimer");
+      this.$store.commit("setGameState", "end");
+      this.$store.commit("clearFoundCountries");
+      this.$refs.map.updateHighlightedAreas(this.$store.getters.foundCountries);
+      this.$store.commit("setCurrentCountry", null);
       this.remainingCountries = this.countries;
-      this.lifes = 3;
+      this.$store.commit("setLifes", 3);
     },
     setNewCountry() {
-      this.currentCountry = this.remainingCountries[
+      const newCountry = this.remainingCountries[
         Math.floor(
-          Math.random() * (this.totalCountries - this.guessedCountries.length)
+          Math.random() *
+            (this.$store.getters.getTotalCountries -
+              this.$store.getters.foundCountriesAmount)
         )
       ];
+      this.$store.commit("setCurrentCountry", newCountry);
+    },
+  },
+  computed: {
+    currentCountry() {
+      return this.$store.getters.currentCountry;
     },
   },
   mounted() {
     this.countries = countries.features;
     this.remainingCountries = this.countries;
-    this.totalCountries = countries.features.length;
+    this.$store.commit("setTotalCountries", countries.features.length);
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.nav {
-  position: fixed;
-  width: 100%;
-  background: #fff;
-  top: 0;
-  left: 0;
-  padding: 10px 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 1;
-  top: -42px;
-  transition: all 0.5s ease;
-
-  &.active {
-    top: 0;
-  }
-
-  .current-country {
-    font-weight: bold;
-    font-size: 18px;
-  }
-}
-
-.heart {
-  height: 14px;
-}
-</style>
+<style lang="scss" scoped></style>

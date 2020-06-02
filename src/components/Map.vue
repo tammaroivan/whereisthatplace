@@ -33,11 +33,12 @@ export default {
         e.mapboxEvent.lngLat.lng,
         e.mapboxEvent.lngLat.lat,
       ]);
-      this.$emit("pickedCountry", {
-        country: countryId,
-        x: e.mapboxEvent.point.x,
-        y: e.mapboxEvent.point.y,
-      });
+      if (countryId)
+        this.$emit("pickedCountry", {
+          country: countryId,
+          x: e.mapboxEvent.point.x,
+          y: e.mapboxEvent.point.y,
+        });
     },
     updateHighlightedAreas(highlight) {
       this.geoJsonSource.data.features = highlight;

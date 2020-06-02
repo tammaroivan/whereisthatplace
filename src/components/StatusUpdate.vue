@@ -9,7 +9,7 @@
 export default {
   data() {
     return {
-      status: "error",
+      status: "",
       style: {
         left: "0px",
         top: "0px",
@@ -39,7 +39,10 @@ export default {
   transition: opacity 0.5s ease;
 
   img {
-    height: 50px;
+    height: 30px;
+    background: #fff;
+    padding: 3px;
+    border-radius: 50%;
   }
 }
 </style>

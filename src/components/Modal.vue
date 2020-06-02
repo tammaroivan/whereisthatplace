@@ -1,10 +1,30 @@
 <template>
   <div class="modal">
-    <div class="content">
+    <div class="content" v-if="state === 'start'">
       <h1 class="title">Welcome to ¿Where is that place?</h1>
-      <p class="description">You will be asked to guess where is a specific country.</p>
-      <p class="description">You have to click on it to pass to the next level. If you miss, you will lose a life and get a new random country.</p>
-      <p class="description lifes">You have 3 lifes to guess every country in the world, good luck <span class="crossline">you will need it</span>.</p>
+      <p class="description">
+        You will be asked to guess where is a specific country.
+      </p>
+      <p class="description">
+        You have to click on it to pass to the next level. If you miss, you will
+        lose a life and get a new random country.
+      </p>
+      <p class="description lifes">
+        You have 3 lifes to guess every country in the world, good luck
+        <span class="crossline">you will need it</span>.
+      </p>
+      <button @click="start" class="btn btn-start">Start Game</button>
+    </div>
+    <div class="content" v-if="state === 'end'">
+      <h1 class="title">¿Where is that place?</h1>
+      <p class="description">
+        You did your best. You found {{ foundAmount }} countries in
+        {{ formattedLastTime }}.
+      </p>
+      <p class="description lifes">
+        Do you want to try again? Good luck
+        <span class="crossline">you will need it</span>.
+      </p>
       <button @click="start" class="btn btn-start">Start Game</button>
     </div>
   </div>
@@ -12,12 +32,24 @@
 
 <script>
 export default {
+  computed: {
+    state() {
+      return this.$store.getters.gameState;
+    },
+    foundAmount() {
+      return this.$store.getters.lastMaxFound;
+    },
+    formattedLastTime() {
+      const time = this.$store.getters.lastTimer.split(":");
+      return `${time[0]}m ${time[1]}s`;
+    },
+  },
   methods: {
     start() {
       this.$emit("start");
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -59,7 +91,7 @@ export default {
     }
 
     .btn {
-      background: #35C5F5;
+      background: #35c5f5;
       color: #fff;
       font-weight: bold;
       border: none;

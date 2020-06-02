@@ -39,8 +39,9 @@ export default {
       if (clickData) {
         const selectedCountry = countries.features.find(
           (country) => country.properties.adm0_a3 === clickData.country
-        );        
-        if (selectedCountry.id === this.$store.getters.currentCountry.id) {
+        );
+        
+        if (selectedCountry.properties.adm0_a3 === this.$store.getters.currentCountry.properties.adm0_a3) {
           this.$refs.status.showStatus({
             status: "success",
             x: clickData.x,

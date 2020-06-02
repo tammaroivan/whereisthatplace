@@ -12,7 +12,7 @@
         <img class="heart" src="@/assets/heart.svg" />
       </span>
     </nav>
-    <Map @pickedCountry="choosedCountry" />
+    <Map @pickedCountry="choosedCountry" ref="map" />
   </div>
 </template>
 
@@ -55,6 +55,7 @@ export default {
             y: clickData.y,
           });
           this.guessedCountries.push(selectedCountry);
+          this.$refs.map.updateHighlightedAreas(this.guessedCountries);
           this.remainingCountries = this.remainingCountries.filter(
             (c) => c.id !== clickData.country
           );
@@ -76,6 +77,7 @@ export default {
     },
     restartGame() {
       this.guessedCountries = [];
+      this.$refs.map.updateHighlightedAreas(this.guessedCountries);
       this.currentCountry = "";
       this.remainingCountries = this.countries;
       this.lifes = 3;

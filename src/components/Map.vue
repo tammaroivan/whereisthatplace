@@ -22,14 +22,13 @@ import { MglMap, MglGeojsonLayer } from "vue-mapbox";
 import countries from "which-country/lib/data.geo.json";
 
 export default {
+  props: ["highlightAreas"],
   components: {
     MglMap,
     MglGeojsonLayer,
   },
   methods: {
     onClick(e) {
-      console.log(countries);
-
       const countryId = wc([
         e.mapboxEvent.lngLat.lng,
         e.mapboxEvent.lngLat.lat,
@@ -40,6 +39,9 @@ export default {
         y: e.mapboxEvent.point.y,
       });
     },
+    updateHighlightedAreas(highlight) {
+      this.geoJsonSource.data.features = highlight;
+    },
   },
   data() {
     return {
@@ -47,23 +49,20 @@ export default {
       mapStyle: "mapbox://styles/tammaroivan/ckawnwq9d0dee1ilnxrnegehr", // your map style
       test: countries.features,
       geoJsonSource: {
-        type: "vector",
-        url: "mapbox://saurabhp.countries_tileset",
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: {},
+        },
       },
       geoJsonLayer: {
-        "source-layer": "countries",
         id: "maine",
         type: "fill",
+        source: "maine",
         layout: {},
         paint: {
-          "fill-color": {
-            property: "name",
-            type: "categorical",
-            stops: [
-              ["Argentina", "#A30059"],
-            ],
-          },
-          "fill-opacity": 0.1,
+          "fill-color": "#088",
+          "fill-opacity": 0.8,
         },
       },
     };

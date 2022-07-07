@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "mapbox-gl": "^1.10.1",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "vue": "^2.6.11",
     "vue-gtag": "^1.6.2",
     "vue-mapbox": "^0.4.1",
